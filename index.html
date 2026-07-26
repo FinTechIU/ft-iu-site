@@ -14,13 +14,14 @@
     --navy: #141c2e;
     --navy-2: #1a2338;
     --navy-line: #2a3551;
-    --paper: #f5f3ee;
-    --paper-2: #ece9e0;
+    /* same white as the Apply button in the header */
+    --paper: #ffffff;
+    --paper-2: #eef0f4;
     --ink: #141c2e;
     --ink-2: #2a3551;
     --muted: #6b7285;
     --rule: #141c2e;
-    --rule-soft: #c9c4b4;
+    --rule-soft: #d3d7e0;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
@@ -29,6 +30,10 @@
     overscroll-behavior: none;
     /* gutter matches header/footer if an engine bounces anyway */
     background: var(--navy);
+    /* stop ios/android inflating body text on rotate, which reflows the
+       hero differently from every desktop engine */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
   body {
     background: var(--paper);
@@ -37,10 +42,26 @@
     font-size: 16px;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
   a { color: inherit; text-decoration: none; }
   .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+  /* ---------- CROSS-BROWSER NORMALISATION ---------- */
+  /* safari squashes inline icons inside flex rows; everyone else does not */
+  .nav-cta svg, .btn svg, .scroll-cue svg, .member-links svg,
+  .socials svg, .podcast-also svg { flex-shrink: 0; }
+  /* one focus ring instead of chrome's double ring, firefox's dotted
+     outline and safari's blue glow */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--navy);
+    outline-offset: 2px;
+  }
+  /* navy on navy would be an invisible ring */
+  header.nav a:focus-visible, footer a:focus-visible,
+  .join a:focus-visible, .lb-btn:focus-visible { outline-color: #fff; }
+  ::selection { background: var(--navy); color: #fff; }
 
   /* ---------- HEADER (navy strip) ---------- */
   header.nav {
@@ -97,17 +118,32 @@
   /* ---------- SCROLL CUE (phones only) ---------- */
   .scroll-cue {
     display: none;
-    position: absolute; left: 50%; bottom: 22px; z-index: 2;
+    /* fixed, not absolute: on short phones the hero content outgrows the
+       hero's min-height, and a cue pinned to the hero's bottom edge rides
+       it off the screen. also clears the iOS home indicator. */
+    position: fixed; left: 50%; z-index: 2;
+    /* plain value first: an engine without env() drops the calc line whole,
+       and bottom:auto would fling the cue to the top of the screen */
+    bottom: 20px;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    /* centring lives here, not only in the keyframes, so it survives
+       animation:none under reduced motion */
+    transform: translate(-50%, 0);
     flex-direction: column; align-items: center; gap: 7px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase;
     color: var(--ink-2);
+    opacity: 0.72;
+    transition: opacity .3s ease;
     animation: cueBob 2.2s ease-in-out infinite;
   }
   .scroll-cue svg { width: 15px; height: 15px; display: block; }
+  /* JS adds .gone once the reader has taken the hint, or when the hero copy
+     runs to the fold and leaves the cue nowhere clear to sit */
+  .scroll-cue.gone { opacity: 0; pointer-events: none; }
   @keyframes cueBob {
-    0%, 100% { transform: translate(-50%, 0);   opacity: 0.4; }
-    50%      { transform: translate(-50%, 7px); opacity: 1; }
+    0%, 100% { transform: translate(-50%, 0); }
+    50%      { transform: translate(-50%, 7px); }
   }
 
   /* phone: hero fills the screen under the header */
@@ -120,6 +156,16 @@
     .hero .headline { font-size: clamp(46px, 13.5vw, 68px); }
     .hero-foot { margin-top: 36px; }
     .scroll-cue { display: flex; }
+  }
+
+  /* short phones: tighten the hero so its copy stops short of the cue
+     instead of running under the fade */
+  @media (max-width: 760px) and (max-height: 720px) {
+    .hero { padding: 40px 0 96px; }
+    .hero .headline { font-size: clamp(38px, 11vw, 52px); }
+    .hero-foot { margin-top: 22px; }
+    .hero-foot .lede { font-size: 16px; }
+    .hero-foot { gap: 26px; }
   }
 
   /* ---------- HERO BACKDROP ---------- */
@@ -183,7 +229,7 @@
   @media (prefers-reduced-motion: reduce) {
     .hero-chart .line.draw { animation: none; stroke-dashoffset: 0; }
     .hero-code .caret { animation: none; }
-    .scroll-cue { animation: none; transform: translate(-50%, 0); opacity: 0.75; }
+    .scroll-cue { animation: none; }
   }
   h1.headline {
     font-family: 'Space Grotesk', 'Inter', sans-serif;
@@ -253,6 +299,9 @@
   }
   .gal-item {
     position: relative;
+    /* prefixed pair: safari still splits frames across columns without it */
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
     break-inside: avoid;
     margin: 0 0 14px;
     overflow: hidden;
@@ -294,7 +343,11 @@
   .lb.on { display: flex; }
   .lb-fig { margin: 0; width: 100%; max-width: 1080px; }
   .lb-fig img {
-    width: 100%; height: auto; max-height: 76vh;
+    width: 100%; height: auto;
+    /* svh keeps the frame inside the fixed overlay on mobile safari, where
+       76vh measures the toolbar-hidden viewport and overflows */
+    max-height: 76vh;
+    max-height: 76svh;
     object-fit: contain; display: block;
     border: 1px solid rgba(255, 255, 255, 0.18);
   }
@@ -401,6 +454,7 @@
     font-weight: 700;
     letter-spacing: -0.02em;
     color: var(--ink);
+    -webkit-user-select: none;
     user-select: none;
     overflow: hidden;
   }
@@ -591,11 +645,14 @@
       </div>
     </div>
   </div>
-  <a class="scroll-cue" href="#team" aria-label="Scroll down to see more">
-    <span>Learn more</span>
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-  </a>
 </section>
+
+<!-- phone scroll cue: fixed to the viewport, and kept outside .hero because
+     older iOS safari clips fixed children of an overflow:hidden ancestor -->
+<a class="scroll-cue" href="#team" aria-label="Scroll down to see more">
+  <span>Learn more</span>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+</a>
 
 <!-- LEADERSHIP -->
 <section id="team">
@@ -909,6 +966,25 @@
       });
     }, { threshold: 0.1 });
     els.forEach(function (e) { io.observe(e); });
+  })();
+
+  /* the phone scroll cue is pinned to the viewport. it is always visible at
+     the top of the page; the only thing that retires it is scrolling. */
+  (function () {
+    var cue = document.querySelector('.scroll-cue');
+    if (!cue) return;
+    var scrolled = false;
+
+    function onScroll() {
+      var past = (window.pageYOffset || document.documentElement.scrollTop) > 40;
+      if (past === scrolled) return;
+      scrolled = past;
+      cue.classList.toggle('gone', past);
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    cue.addEventListener('click', function () { cue.classList.add('gone'); });
+    onScroll();
   })();
 
   /* run the random walk from the snippet, then draw it */
