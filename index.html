@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FinTech at Indiana University</title>
+<meta name="description" content="FinTech at Indiana University, bridging finance and computer science at Kelley. Indiana's fastest-growing club." />
+<link rel="icon" type="image/png" href="FtLogo.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy: #141c2e;
+    --navy-2: #1a2338;
+    --navy-line: #2a3551;
+    --paper: #f5f3ee;
+    --paper-2: #ece9e0;
+    --ink: #141c2e;
+    --ink-2: #2a3551;
+    --muted: #6b7285;
+    --rule: #141c2e;
+    --rule-soft: #c9c4b4;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html {
+    /* no rubber-band overscroll */
+    overscroll-behavior: none;
+    /* gutter matches header/footer if an engine bounces anyway */
+    background: var(--navy);
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a { color: inherit; text-decoration: none; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+  /* ---------- HEADER (navy strip) ---------- */
+  header.nav {
+    background: var(--navy);
+    color: #fff;
+    border-bottom: 1px solid #000;
+    position: sticky; top: 0; z-index: 50;
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 88px;
+  }
+  .brand { display: flex; align-items: center; gap: 0; }
+  .brand img { height: 48px; width: auto; display: block; }
+  nav.links { display: flex; gap: 30px; margin-left: auto; margin-right: 34px; }
+  nav.links a {
+    font-size: 13px; font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.02em;
+    transition: color .12s ease;
+    text-transform: uppercase;
+  }
+  nav.links a:hover { color: #fff; }
+  .nav-cta {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-size: 12px; font-weight: 600;
+    padding: 12px 22px;
+    background: #fff; color: var(--navy);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border: 1px solid #fff;
+    transition: background .12s, color .12s;
+  }
+  .nav-cta:hover { background: transparent; color: #fff; }
+  .nav-cta svg { width: 11px; height: 11px; display: block; }
+  @media (max-width: 760px) {
+    nav.links { display: none; }
+    .brand img { height: 36px; }
+    .nav-inner { height: 72px; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 120px 0 110px;
+    min-height: calc(100vh - 88px);
+    /* capped so it doesn't stretch absurdly on very tall monitors */
+    min-height: min(calc(100svh - 88px), 940px);
+    display: flex; align-items: center;
+    border-bottom: 1px solid var(--rule);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero .container { position: relative; z-index: 1; width: 100%; }
+
+  /* ---------- SCROLL CUE ---------- */
+  .scroll-cue {
+    display: flex;
+    position: absolute; left: 50%; bottom: 22px; z-index: 2;
+    flex-direction: column; align-items: center; gap: 7px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink-2);
+    animation: cueBob 2.2s ease-in-out infinite;
+  }
+  .scroll-cue svg { width: 15px; height: 15px; display: block; }
+  @keyframes cueBob {
+    0%, 100% { transform: translate(-50%, 0);   opacity: 0.4; }
+    50%      { transform: translate(-50%, 7px); opacity: 1; }
+  }
+
+  /* phone: hero fills the screen under the header */
+  @media (max-width: 760px) {
+    .hero {
+      min-height: calc(100vh - 72px);
+      min-height: min(calc(100svh - 72px), 940px);
+      padding: 64px 0 104px;
+    }
+    .hero .headline { font-size: clamp(46px, 13.5vw, 68px); }
+    .hero-foot { margin-top: 36px; }
+  }
+
+  /* ---------- HERO BACKDROP ---------- */
+  .hero-bg {
+    position: absolute; inset: 0;
+    overflow: hidden; pointer-events: none;
+    z-index: 0;
+  }
+  .hero-chart {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    width: 100%; height: 60%;
+    display: block;
+  }
+  .hero-chart .line {
+    fill: none; stroke: var(--ink); stroke-width: 1.6;
+    opacity: 0.13;
+    stroke-linejoin: round; stroke-linecap: round;
+  }
+  /* JS sets the dash length, then adds .draw */
+  .hero-chart .line.draw {
+    animation: hgDraw 3.2s cubic-bezier(.25,.8,.3,1) .2s forwards;
+  }
+  @keyframes hgDraw { to { stroke-dashoffset: 0; } }
+
+  /* faint code wall behind the headline; opacity stays low as text sits over it */
+  .hero-code {
+    position: absolute; left: 6%; top: 6%;
+    margin: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px; line-height: 1.9;
+    color: var(--ink);
+    white-space: pre;
+    opacity: 0.095;
+    user-select: none;
+  }
+  .hero-code .c { opacity: 0.72; }
+  .hero-code b  { font-weight: 400; }
+  .hero-code .caret {
+    display: inline-block;
+    width: 7px; height: 13px;
+    background: var(--ink);
+    vertical-align: -2px;
+    animation: hgBlink 1.15s step-end infinite;
+  }
+  @keyframes hgBlink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .hero-code .ln { display: block; }
+
+  @media (max-width: 1200px) {
+    .hero-code { left: 5%; top: 5%; }
+  }
+  @media (max-width: 760px) {
+    .hero-code { font-size: 15px; line-height: 1.85; left: 6%; top: 4%; opacity: 0.1; }
+  }
+  @media (max-width: 620px) {
+    .hero-chart { height: 45%; }
+    .hero-code { font-size: 13px; line-height: 1.8; left: 7%; top: 3.5%; }
+    .hero-code .caret { width: 7px; height: 12px; vertical-align: -1px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-chart .line.draw { animation: none; stroke-dashoffset: 0; }
+    .hero-code .caret { animation: none; }
+    .scroll-cue { animation: none; transform: translate(-50%, 0); opacity: 0.75; }
+  }
+  h1.headline {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: clamp(48px, 8vw, 120px);
+    font-weight: 700; line-height: 0.92; letter-spacing: -0.035em;
+    margin: 0;
+    color: var(--ink);
+  }
+  h1.headline .line { display: block; }
+  h1.headline .italic { font-style: italic; font-weight: 400; font-family: 'Space Grotesk', serif; }
+  .hero-foot {
+    display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px;
+    align-items: end;
+    margin-top: 60px;
+  }
+  .hero-foot .btn-row { justify-self: end; }
+  @media (max-width: 820px) {
+    .hero-foot { grid-template-columns: 1fr; }
+    .hero-foot .btn-row { justify-self: start; }
+  }
+  .hero-foot .lede {
+    font-size: 18px; line-height: 1.5; color: var(--ink-2); margin: 0;
+    max-width: 520px;
+  }
+  .btn-row { display: flex; gap: 0; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 16px 26px;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    transition: background .12s ease, color .12s ease;
+    border: 1px solid var(--ink);
+  }
+  .btn-primary { background: var(--ink); color: var(--paper); }
+  .btn-primary:hover { background: transparent; color: var(--ink); }
+  .btn-ghost { background: transparent; color: var(--ink); border-left: none; }
+  .btn-ghost:hover { background: var(--ink); color: var(--paper); }
+  .btn svg { width: 12px; height: 12px; }
+  /* phone: stack the join buttons, keep the hero pair side by side */
+  @media (max-width: 560px) {
+    .join .btn-row { flex-direction: column; align-items: stretch; }
+    .join .btn { justify-content: center; }
+    .join .btn-row .btn + .btn { border-top: none; }
+    .btn-long { display: none; }
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding: 110px 0; border-bottom: 1px solid var(--rule); position: relative; }
+  .sec-head {
+    display: block;
+    margin-bottom: 64px;
+  }
+  .sec-num { display: none; }
+  .sec-title {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700; letter-spacing: -0.025em;
+    margin: 0; line-height: 1; color: var(--ink);
+  }
+  .sec-title .italic { font-style: italic; font-weight: 400; }
+  .sec-sub { color: var(--muted); max-width: 540px; margin-top: 20px; font-size: 16px; }
+
+  /* EVENTS — masonry gallery */
+  .gal {
+    columns: 3;
+    column-gap: 14px;
+  }
+  .gal-item {
+    position: relative;
+    break-inside: avoid;
+    margin: 0 0 14px;
+    overflow: hidden;
+    border: 1px solid var(--ink);
+    background: var(--paper-2);
+    cursor: zoom-in;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1);
+  }
+  .gal-item.on { opacity: 1; transform: none; }
+  .gal-item img {
+    width: 100%; height: auto; display: block;
+    transition: transform .7s cubic-bezier(.2,.7,.3,1), filter .4s ease;
+    filter: saturate(0.94);
+  }
+  .gal-item:hover img { transform: scale(1.045); filter: none; }
+  .gal-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(20, 28, 46, 0.28), transparent 45%);
+    opacity: 0;
+    transition: opacity .4s ease;
+    pointer-events: none;
+  }
+  .gal-item:hover::after { opacity: 1; }
+  .gal-item:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; }
+
+  @media (max-width: 760px) { .gal { columns: 2; column-gap: 10px; } .gal-item { margin-bottom: 10px; } }
+  @media (max-width: 420px) { .gal { columns: 1; } }
+
+  /* LIGHTBOX */
+  .lb {
+    position: fixed; inset: 0; z-index: 200;
+    background: rgba(20, 28, 46, 0.95);
+    display: none; align-items: center; justify-content: center;
+    padding: 64px 72px;
+  }
+  .lb.on { display: flex; }
+  .lb-fig { margin: 0; width: 100%; max-width: 1080px; }
+  .lb-fig img {
+    width: 100%; height: auto; max-height: 76vh;
+    object-fit: contain; display: block;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+  }
+  .lb-cap {
+    display: flex; justify-content: space-between; gap: 24px;
+    padding-top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+  }
+  .lb-cap b { font-weight: 500; color: #fff; }
+  .lb-btn {
+    position: absolute; background: none; padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #fff; width: 44px; height: 44px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 16px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s ease;
+  }
+  .lb-btn:hover { background: rgba(255, 255, 255, 0.15); }
+  .lb-prev { left: 20px; top: 50%; transform: translateY(-50%); }
+  .lb-next { right: 20px; top: 50%; transform: translateY(-50%); }
+  .lb-close { top: 20px; right: 20px; }
+  @media (max-width: 560px) {
+    .lb { padding: 56px 16px; }
+    .lb-prev { left: 8px; } .lb-next { right: 8px; }
+    .lb-cap { flex-direction: column; gap: 6px; }
+  }
+
+  /* PODCAST */
+  .podcast-frame {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #121212;
+    box-shadow: 0 18px 50px -20px rgba(20,28,46,0.35), 0 2px 6px rgba(20,28,46,0.08);
+  }
+  .podcast-frame iframe {
+    display: block;
+    width: 100%;
+    height: 360px;
+    border: 0;
+    background: #121212;
+  }
+  .podcast-also {
+    margin-top: 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .podcast-also a {
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+    transition: opacity .12s ease;
+  }
+  .podcast-also a:hover { opacity: 0.6; }
+  @media (max-width: 600px) { .podcast-also { justify-content: flex-start; } }
+
+  .btn-light {
+    background: #fff; color: var(--navy); border-color: #fff;
+  }
+  .btn-light:hover { background: transparent; color: #fff; border-color: #fff; }
+
+  /* LEADERSHIP */
+  .team {
+    display: grid;
+    /* minmax(0,…) keeps columns equal regardless of content width */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border: 1px solid var(--ink);
+    border-right: none;
+    border-bottom: none;
+  }
+  @media (max-width: 820px) { .team { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  .member {
+    padding: 32px;
+    border-right: 1px solid var(--ink);
+    border-bottom: 1px solid var(--ink);
+    display: flex;
+    flex-direction: column;
+  }
+  .member-photo {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    margin-bottom: 24px;
+    background:
+      radial-gradient(120% 100% at 0% 0%, rgba(20,28,46,0.08) 0%, transparent 55%),
+      radial-gradient(120% 100% at 100% 100%, rgba(20,28,46,0.05) 0%, transparent 55%),
+      var(--paper-2);
+    border: 1px solid var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: clamp(32px, 4.5vw, 56px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    user-select: none;
+    overflow: hidden;
+  }
+  .member-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .member .role {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.18em;
+    color: var(--muted); font-weight: 600; margin-bottom: 4px;
+  }
+  .member h4 { margin: 0 0 18px; font-size: 20px; font-weight: 600; letter-spacing: -0.015em; }
+  .member-links {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+  }
+  .member-links a {
+    width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid var(--ink);
+    color: var(--ink);
+    transition: background .12s ease, color .12s ease;
+  }
+  .member-links a:hover { background: var(--ink); color: var(--paper); }
+  .member-links svg { width: 14px; height: 14px; }
+
+  /* SOCIALS / FOLLOW */
+  .socials-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid var(--ink);
+  }
+  @media (max-width: 820px) { .socials-grid { grid-template-columns: 1fr; } }
+  .social-card {
+    padding: 40px 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    border-right: 1px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+    color: inherit;
+  }
+  .social-card:last-child { border-right: none; }
+  @media (max-width: 820px) {
+    .social-card { border-right: none; border-bottom: 1px solid var(--ink); }
+    .social-card:last-child { border-bottom: none; }
+  }
+  .social-card:hover .social-cta { transform: translateX(6px); }
+  .social-card-top { display: flex; align-items: center; gap: 18px; }
+  .social-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .social-icon svg { width: 28px; height: 28px; }
+  .social-handle { font-size: 18px; font-weight: 700; letter-spacing: -0.01em; }
+  .social-platform {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    opacity: 0.75;
+  }
+  .social-cta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: transform .2s ease;
+    display: inline-block;
+  }
+  .social-ig {
+    background:
+      radial-gradient(120% 80% at 0% 100%, #fee9d2 0%, transparent 55%),
+      radial-gradient(100% 80% at 100% 0%, #f9d4f8 0%, transparent 60%),
+      var(--paper);
+    color: var(--ink);
+  }
+  .social-ig .social-icon {
+    background: linear-gradient(135deg, #fa7e1e 0%, #d62976 50%, #962fbf 100%);
+    color: #fff;
+  }
+  .social-li { background: #0a66c2; color: #fff; }
+  .social-li .social-icon { background: #fff; color: #0a66c2; }
+  .social-li .social-platform { color: rgba(255,255,255,0.85); }
+
+  /* JOIN / CTA */
+  .join {
+    background: var(--navy); color: #fff;
+    padding: 120px 48px;
+    text-align: left;
+    border: 1px solid var(--ink);
+  }
+  .join-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+    align-items: end;
+    max-width: 1120px; margin: 0 auto;
+  }
+  @media (max-width: 820px) { .join-grid { grid-template-columns: 1fr; } }
+  .join h2 {
+    font-size: clamp(40px, 6vw, 80px); margin: 0; letter-spacing: -0.03em;
+    line-height: 0.95; font-weight: 700;
+  }
+  .join h2 .italic { font-style: italic; font-weight: 400; }
+  .join .right p { color: rgba(255,255,255,0.7); margin: 0 0 28px; font-size: 17px; max-width: 440px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy); color: rgba(255,255,255,0.6);
+    font-size: 13px;
+    padding: 40px 0;
+  }
+  .foot-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+  }
+  .foot-left { display: flex; gap: 20px; align-items: center; }
+  .foot-left img { height: 28px; }
+  .socials { display: flex; gap: 0; }
+  .socials a {
+    width: 40px; height: 40px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-right: none;
+    color: rgba(255,255,255,0.7);
+    transition: color .12s, background .12s;
+  }
+  .socials a:last-child { border-right: 1px solid rgba(255,255,255,0.2); }
+  .socials a:hover { color: #fff; background: rgba(255,255,255,0.08); }
+  .socials svg { width: 15px; height: 15px; }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(12px); transition: opacity .5s ease, transform .5s ease; }
+  .reveal.on { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="nav">
+  <div class="container nav-inner">
+    <a href="#" class="brand" aria-label="FinTech at IU home">
+      <img src="FintechLogo.png" alt="FinTech at Indiana University" />
+    </a>
+    <nav class="links">
+      <a href="#team">Team</a>
+      <a href="#events">Gallery</a>
+      <a href="#follow">Stay in the loop</a>
+      <a href="#podcast">Podcast</a>
+    </nav>
+    <a class="nav-cta" href="#join">
+      Apply
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <svg class="hero-chart" viewBox="0 0 1200 300" preserveAspectRatio="none" focusable="false">
+      <path class="line" id="walkPath" d="" />
+    </svg>
+    <pre class="hero-code"><span class="ln c">// geometric random walk</span><span class="ln">double s  = <b id="wkS0">100.00</b>;</span><span class="ln">double mu = <b id="wkMu">0.09</b>, sig = <b id="wkSig">0.18</b>;</span><span class="ln">normal_distribution&lt;double&gt; z(0,1);</span><span class="ln"> </span><span class="ln">for (int t = 1; t &lt; N; ++t) {</span><span class="ln">  double dW = z(gen) * sqrt(dt);</span><span class="ln">  s *= exp(mu*dt + sig*dW);</span><span class="ln">  path[t] = s;</span><span class="ln">}</span><span class="ln"> </span><span class="ln c">// N = <b id="wkN">240</b></span><span class="ln c">// s[N] = <b id="wkEnd">&mdash;</b><i class="caret"></i></span></pre>
+  </div>
+  <div class="container">
+    <h1 class="headline reveal">
+      <span class="line">Where finance</span>
+      <span class="line"><span class="italic">meets</span> code.</span>
+    </h1>
+    <div class="hero-foot">
+      <p class="lede reveal">
+        FinTech at Indiana University connects students from across tech, business, and beyond, building practical skills that put members at top firms in quant, finance, consulting, and software engineering.
+      </p>
+      <div class="btn-row reveal">
+        <a class="btn btn-primary" href="#join">
+          <span>Join<span class="btn-long"> the club</span></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#podcast">Listen</a>
+      </div>
+    </div>
+  </div>
+  <a class="scroll-cue" href="#team" aria-label="Scroll down to see more">
+    <span>Learn more</span>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+  </a>
+</section>
+
+<!-- LEADERSHIP -->
+<section id="team">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-num">05 / TEAM</span>
+      <div>
+        <h2 class="sec-title"><span class="italic">Leadership.</span></h2>
+      </div>
+    </div>
+    <div class="team">
+      <div class="member reveal">
+        <div class="member-photo"><img src="team/charlie.png" alt="Charlie Sondik" loading="lazy" /></div>
+        <div class="role">Co-President</div>
+        <h4>Charlie Sondik</h4>
+        <div class="member-links">
+          <a href="mailto:csondik@iu.edu" aria-label="Email Charlie Sondik">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/csondik/" target="_blank" rel="noopener" aria-label="LinkedIn for Charlie Sondik">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.53 4.78 5.83V21h-4v-5.6c0-1.33-.02-3.05-1.95-3.05-1.95 0-2.25 1.45-2.25 2.95V21h-4V9z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="member reveal">
+        <div class="member-photo"><img src="team/jayci.jpg" alt="Jayci Nasser" loading="lazy" /></div>
+        <div class="role">Co-President</div>
+        <h4>Jayci Nasser</h4>
+        <div class="member-links">
+          <a href="mailto:jayknass@iu.edu" aria-label="Email Jayci Nasser">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/jaycinasser/" target="_blank" rel="noopener" aria-label="LinkedIn for Jayci Nasser">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.53 4.78 5.83V21h-4v-5.6c0-1.33-.02-3.05-1.95-3.05-1.95 0-2.25 1.45-2.25 2.95V21h-4V9z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="member reveal">
+        <div class="member-photo"><img src="team/rijul.jpg" alt="Rijul Tripathi" loading="lazy" /></div>
+        <div class="role">Vice President</div>
+        <h4>Rijul Tripathi</h4>
+        <div class="member-links">
+          <a href="mailto:rijtrip@iu.edu" aria-label="Email Rijul Tripathi">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/rijul-tripathi/" target="_blank" rel="noopener" aria-label="LinkedIn for Rijul Tripathi">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.53 4.78 5.83V21h-4v-5.6c0-1.33-.02-3.05-1.95-3.05-1.95 0-2.25 1.45-2.25 2.95V21h-4V9z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="member reveal">
+        <div class="member-photo"><img src="team/jay.jpg" alt="Jay Patel" loading="lazy" /></div>
+        <div class="role">Director of Finance</div>
+        <h4>Jay Patel</h4>
+        <div class="member-links">
+          <a href="mailto:jpp3@iu.edu" aria-label="Email Jay Patel">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/jay-patel1006/" target="_blank" rel="noopener" aria-label="LinkedIn for Jay Patel">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.53 4.78 5.83V21h-4v-5.6c0-1.33-.02-3.05-1.95-3.05-1.95 0-2.25 1.45-2.25 2.95V21h-4V9z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="member reveal">
+        <div class="member-photo"><img src="team/sarah.jpg" alt="Sarah Segvich" loading="lazy" /></div>
+        <div class="role">Director of Event Operations</div>
+        <h4>Sarah Segvich</h4>
+        <div class="member-links">
+          <a href="mailto:ssegvich@iu.edu" aria-label="Email Sarah Segvich">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/sarahsegvich/" target="_blank" rel="noopener" aria-label="LinkedIn for Sarah Segvich">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.53 4.78 5.83V21h-4v-5.6c0-1.33-.02-3.05-1.95-3.05-1.95 0-2.25 1.45-2.25 2.95V21h-4V9z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="member reveal">
+        <div class="member-photo"><img src="team/amol.jpg" alt="Amol Shukla" loading="lazy" /></div>
+        <div class="role">Director of Student Outreach</div>
+        <h4>Amol Shukla</h4>
+        <div class="member-links">
+          <a href="mailto:amolshuk@iu.edu" aria-label="Email Amol Shukla">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/amol-shukla/" target="_blank" rel="noopener" aria-label="LinkedIn for Amol Shukla">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.53 4.78 5.83V21h-4v-5.6c0-1.33-.02-3.05-1.95-3.05-1.95 0-2.25 1.45-2.25 2.95V21h-4V9z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="member reveal">
+        <div class="member-photo"><img src="team/gabriel.jpg" alt="Gabriel Shores" loading="lazy" /></div>
+        <div class="role">Director of Technology</div>
+        <h4>Gabriel Shores</h4>
+        <div class="member-links">
+          <a href="mailto:shores2023@gmail.com" aria-label="Email Gabriel Shores">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/gabrielshores/" target="_blank" rel="noopener" aria-label="LinkedIn for Gabriel Shores">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.53 4.78 5.83V21h-4v-5.6c0-1.33-.02-3.05-1.95-3.05-1.95 0-2.25 1.45-2.25 2.95V21h-4V9z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="member reveal">
+        <div class="member-photo"><img src="team/christian.jpg" alt="Christian Seoane" loading="lazy" /></div>
+        <div class="role">KSG Organizational Delegate</div>
+        <h4>Christian Seoane</h4>
+        <div class="member-links">
+          <a href="mailto:cdseoane@iu.edu" aria-label="Email Christian Seoane">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/christianseoane/" target="_blank" rel="noopener" aria-label="LinkedIn for Christian Seoane">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.53 4.78 5.83V21h-4v-5.6c0-1.33-.02-3.05-1.95-3.05-1.95 0-2.25 1.45-2.25 2.95V21h-4V9z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-num">03 / EVENTS</span>
+      <div>
+        <h2 class="sec-title"><span class="italic">Gallery.</span></h2>
+      </div>
+    </div>
+
+    <div class="gal">
+      <figure class="gal-item" data-lb="events/mmspc-pitch.jpg" data-cap="Final-round pitch to the judging panel" data-meta="March Madness Stock Pitch">
+        <img src="events/mmspc-pitch-sm.jpg" alt="A member presenting a stock pitch at the Kelley podium to a panel of judges" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/flyer-tiktok-panel.jpg" data-cap="TikTok Data Privacy Counsel Panel, with the Corporate Law Club" data-meta="February 2025">
+        <img src="events/flyer-tiktok-panel-sm.jpg" alt="Flyer for the TikTok Data Privacy Counsel Panel with Charles, Senior Counsel at TikTok" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/earthday-crowd.jpg" data-cap="Talking fintech-for-good with students at the table" data-meta="Earth Day Fest">
+        <img src="events/earthday-crowd-sm.jpg" alt="Students gathered around the FinTech booth table outdoors" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/mmspc-winner.jpg" data-cap="Winning pitch &mdash; Celsius Holdings (NASDAQ: CELH), 36% implied upside" data-meta="March Madness Stock Pitch">
+        <img src="events/mmspc-winner-sm.jpg" alt="Member in a suit beside a Celsius Holdings long recommendation slide" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/earthday-booth.jpg" data-cap="The FinTech booth at IU&rsquo;s Earth Day Fest" data-meta="Spring 2026">
+        <img src="events/earthday-booth-sm.jpg" alt="Two members staffing the FinTech booth outdoors with a Where Does FinTech Change Lives poster" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/flyer-digital-economy.jpg" data-cap="Navigating the Digital Economy: Blockchain, Crypto &amp; Financial Growth &mdash; Stephen Opong" data-meta="March 2025">
+        <img src="events/flyer-digital-economy-sm.jpg" alt="Flyer for the Navigating the Digital Economy speaker event with Stephen Opong" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/mmspc-judges.jpg" data-cap="The judging panel between rounds" data-meta="March Madness Stock Pitch">
+        <img src="events/mmspc-judges-sm.jpg" alt="Judges and members seated around a table in a Kelley classroom" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/bowling.jpg" data-cap="League night with the champions board" data-meta="Member social">
+        <img src="events/bowling-sm.jpg" alt="Four members at a bowling alley, one holding a ball beside a champions poster" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/earthday-costumes.jpg" data-cap="Booth duty, fully committed" data-meta="Earth Day Fest">
+        <img src="events/earthday-costumes-sm.jpg" alt="Two members in inflatable earth and sun costumes beside the booth poster" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/wso-partnership.jpg" data-cap="Partnership with Wall Street Oasis &mdash; bootcamp seats, Bloomberg, application tracker" data-meta="Club announcement">
+        <img src="events/wso-partnership-sm.jpg" alt="Graphic announcing the FinTech at IU partnership with Wall Street Oasis" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/mmspc-runnerup.jpg" data-cap="Runner-up &mdash; Norwegian Cruise Line Holdings (NYSE: NCLH), strong buy" data-meta="March Madness Stock Pitch">
+        <img src="events/mmspc-runnerup-sm.jpg" alt="Two members in suits beside a Norwegian Cruise Line pitch slide" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/earthday-stickers.jpg" data-cap="Handing out stickers on the lawn" data-meta="Earth Day Fest">
+        <img src="events/earthday-stickers-sm.jpg" alt="Two members holding FinTech stickers outdoors" loading="lazy" />
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- FOLLOW / SOCIALS -->
+<section id="follow">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-num">06 / FOLLOW</span>
+      <div>
+        <h2 class="sec-title">Stay in the <span class="italic">loop</span>.</h2>
+      </div>
+    </div>
+    <div class="socials-grid">
+      <a class="social-card social-ig reveal" href="https://www.instagram.com/fintechiu/" target="_blank" rel="noopener">
+        <div class="social-card-top">
+          <div class="social-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>
+          </div>
+          <div class="social-meta">
+            <div class="social-handle">@fintechiu</div>
+            <div class="social-platform">Instagram</div>
+          </div>
+        </div>
+        <div class="social-cta">View on Instagram &nbsp;&rarr;</div>
+      </a>
+      <a class="social-card social-li reveal" href="https://www.linkedin.com/company/fintechiu" target="_blank" rel="noopener">
+        <div class="social-card-top">
+          <div class="social-icon">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.53 4.78 5.83V21h-4v-5.6c0-1.33-.02-3.05-1.95-3.05-1.95 0-2.25 1.45-2.25 2.95V21h-4V9z"/></svg>
+          </div>
+          <div class="social-meta">
+            <div class="social-handle">FinTech at Indiana University</div>
+            <div class="social-platform">LinkedIn</div>
+          </div>
+        </div>
+        <div class="social-cta">Follow on LinkedIn &nbsp;&rarr;</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PODCAST -->
+<section id="podcast">
+  <div class="container">
+    <div class="sec-head">
+      <span class="sec-num">04 / PODCAST</span>
+      <div>
+        <h2 class="sec-title">FinTech <span class="italic">@ IU</span>, the podcast.</h2>
+        <p class="sec-sub">New episodes every Wednesday &amp; Saturday. Conversations with founders, professors, and operators from the most innovative startups in financial technology.</p>
+      </div>
+    </div>
+    <div class="podcast-frame reveal">
+      <iframe
+        title="FinTech @ IU on Spotify"
+        src="https://open.spotify.com/embed/show/4r3H0rHnpSou2ByU2agkhF?utm_source=generator"
+        frameborder="0"
+        allowfullscreen
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"></iframe>
+    </div>
+    <div class="podcast-also">
+      <span>Also available on</span>
+      <a href="https://podcasts.apple.com/us/podcast/fintech-iu/id1712940310" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 4.5a2.25 2.25 0 110 4.5 2.25 2.25 0 010-4.5zm-3.2 6.7c.6-.4 1.7-.7 3.2-.7s2.6.3 3.2.7c.5.3.7.9.6 1.5l-.7 3.9c-.1.6-.7 1.1-1.3 1.1h-3.6c-.6 0-1.2-.5-1.3-1.1l-.7-3.9c-.1-.6.1-1.2.6-1.5z"/></svg>
+        Apple Podcasts
+        <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17l10-10"/><path d="M7 7h10v10"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- JOIN -->
+<section id="join" style="padding: 0; border-bottom: none;">
+  <div class="join">
+    <div class="join-grid">
+      <div>
+        <h2>Ready to build <span class="italic">something</span> in fintech?</h2>
+      </div>
+      <div class="right">
+        <p>Applications open every semester. Come to a general interest meeting in Hodge Hall, or reach out on LinkedIn, we&rsquo;ll point you in the right direction.</p>
+        <div class="btn-row">
+          <a class="btn btn-light" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=NL4TEdGuAE2rS83QJRC-kbrHoPmX83hErNFBrmU5SaJURE42WTc0QkszTUhQN0tVNEtXSTZUQ0wwUC4u" target="_blank" rel="noopener">
+            Apply Now
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l10-10"/><path d="M7 7h10v10"/></svg>
+          </a>
+          <a class="btn" style="background:transparent;color:#fff;border-color:#fff;" href="https://beinvolved.indiana.edu/organization/fintechiu" target="_blank" rel="noopener">beINvolved</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container foot-inner">
+    <div class="foot-left">
+      <img src="FintechLogo.png" alt="" aria-hidden="true" />
+    </div>
+    <div class="socials">
+      <a href="https://www.instagram.com/fintechiu/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.6" fill="currentColor"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/company/fintechiu" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3V9zm7 0h3.8v1.7h.05c.53-.96 1.83-1.97 3.77-1.97 4.03 0 4.78 2.53 4.78 5.83V21h-4v-5.6c0-1.33-.02-3.05-1.95-3.05-1.95 0-2.25 1.45-2.25 2.95V21h-4V9z"/></svg>
+      </a>
+      <a href="https://discord.gg/Wvw8QHsxCq" target="_blank" rel="noopener" aria-label="Discord">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c1.8483 1.3579 3.6396 2.1069 5.3565 2.5959a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9509-1.5219 5.3628-2.5959a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+      </a>
+      <a href="https://github.com/FinTechIU/" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Event photo">
+  <button class="lb-btn lb-close" id="lbClose" aria-label="Close">&#10005;</button>
+  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous photo">&#8592;</button>
+  <button class="lb-btn lb-next" id="lbNext" aria-label="Next photo">&#8594;</button>
+  <figure class="lb-fig">
+    <img id="lbImg" src="" alt="" />
+    <figcaption class="lb-cap">
+      <span id="lbCap"></span>
+      <b id="lbMeta"></b>
+    </figcaption>
+  </figure>
+</div>
+
+<script>
+
+  (function () {
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(function (e) { e.classList.add('on'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('on');
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    els.forEach(function (e) { io.observe(e); });
+  })();
+
+  /* run the random walk from the snippet, then draw it */
+  (function () {
+    var path = document.getElementById('walkPath');
+    if (!path) return;
+
+    var N   = 240,
+        S0  = 100,
+        MU  = 0.09,
+        SIG = 0.18,
+        DT  = 1 / 252;
+
+    /* Box-Muller */
+    function gauss() {
+      var u = 1 - Math.random(), v = Math.random();
+      return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+    }
+
+    function walk() {
+      var s = S0, out = [s];
+      for (var t = 1; t < N; t++) {
+        s *= Math.exp(MU * DT + SIG * gauss() * Math.sqrt(DT));
+        out.push(s);
+      }
+      return out;
+    }
+
+    /* resample for a draw that finished up */
+    var series = walk();
+    for (var tries = 0; tries < 60 && series[N - 1] / S0 < 1.12; tries++) series = walk();
+
+    var lo = Math.min.apply(null, series),
+        hi = Math.max.apply(null, series),
+        span = (hi - lo) || 1,
+        TOP = 26, BOT = 274;
+
+    var d = '';
+    for (var i = 0; i < N; i++) {
+      var x = (i / (N - 1)) * 1200,
+          y = BOT - ((series[i] - lo) / span) * (BOT - TOP);
+      d += (i ? ' L' : 'M') + x.toFixed(1) + ',' + y.toFixed(1);
+    }
+    path.setAttribute('d', d);
+
+    function put(id, txt) { var el = document.getElementById(id); if (el) el.textContent = txt; }
+    put('wkS0', S0.toFixed(2));
+    put('wkMu', MU.toFixed(2));
+    put('wkSig', SIG.toFixed(2));
+    put('wkN', String(N));
+    put('wkEnd', series[N - 1].toFixed(2));
+
+    /* dash the exact path length so the draw ends on the last point */
+    var len = path.getTotalLength();
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+    path.classList.add('draw');
+  })();
+
+  /* gallery frames fade in as they scroll into view */
+  (function () {
+    var items = [].slice.call(document.querySelectorAll('.gal-item'));
+    if (!items.length) return;
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (e) { e.classList.add('on'); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        var col = items.indexOf(el) % 3;
+        el.style.transitionDelay = (col * 0.07).toFixed(2) + 's';
+        el.classList.add('on');
+        io.unobserve(el);
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    items.forEach(function (e) { io.observe(e); });
+
+    /* fail-safe if the observer never fires */
+    setTimeout(function () {
+      items.forEach(function (e) { e.classList.add('on'); });
+    }, 2500);
+  })();
+
+  /* gallery lightbox */
+  (function () {
+    var lb = document.getElementById('lb');
+    if (!lb) return;
+    var items = [].slice.call(document.querySelectorAll('[data-lb]'));
+    if (!items.length) return;
+
+    var img = document.getElementById('lbImg');
+    var cap = document.getElementById('lbCap');
+    var meta = document.getElementById('lbMeta');
+    var i = 0;
+
+    function show(n) {
+      i = (n + items.length) % items.length;
+      var el = items[i];
+      img.src = el.getAttribute('data-lb');
+      img.alt = el.querySelector('img') ? el.querySelector('img').alt : '';
+      cap.innerHTML = el.getAttribute('data-cap') || '';
+      meta.innerHTML = el.getAttribute('data-meta') || '';
+    }
+    function open(n) {
+      show(n);
+      lb.classList.add('on');
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      lb.classList.remove('on');
+      document.body.style.overflow = '';
+    }
+
+    items.forEach(function (el, n) {
+      el.setAttribute('tabindex', '0');
+      el.addEventListener('click', function () { open(n); });
+      el.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(n); }
+      });
+    });
+
+    document.getElementById('lbClose').addEventListener('click', close);
+    document.getElementById('lbPrev').addEventListener('click', function (e) { e.stopPropagation(); show(i - 1); });
+    document.getElementById('lbNext').addEventListener('click', function (e) { e.stopPropagation(); show(i + 1); });
+    lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (!lb.classList.contains('on')) return;
+      if (e.key === 'Escape') close();
+      else if (e.key === 'ArrowLeft') show(i - 1);
+      else if (e.key === 'ArrowRight') show(i + 1);
+    });
+  })();
+</script>
+
+</body>
+</html>
