@@ -94,9 +94,9 @@
   }
   .hero .container { position: relative; z-index: 1; width: 100%; }
 
-  /* ---------- SCROLL CUE ---------- */
+  /* ---------- SCROLL CUE (phones only) ---------- */
   .scroll-cue {
-    display: flex;
+    display: none;
     position: absolute; left: 50%; bottom: 22px; z-index: 2;
     flex-direction: column; align-items: center; gap: 7px;
     font-family: 'JetBrains Mono', monospace;
@@ -119,6 +119,7 @@
     }
     .hero .headline { font-size: clamp(46px, 13.5vw, 68px); }
     .hero-foot { margin-top: 36px; }
+    .scroll-cue { display: flex; }
   }
 
   /* ---------- HERO BACKDROP ---------- */
