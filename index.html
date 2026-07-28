@@ -153,7 +153,9 @@
       min-height: min(calc(100svh - 72px), 940px);
       padding: 64px 0 104px;
     }
-    .hero .headline { font-size: clamp(46px, 13.5vw, 68px); }
+    /* 10.5vw is the largest that holds the headline to two lines all the way
+       down to 320px, where the container's fixed 32px gutters bite hardest */
+    .hero .headline { font-size: clamp(30px, 10.5vw, 64px); }
     .hero-foot { margin-top: 36px; }
     .scroll-cue { display: flex; }
   }
@@ -162,7 +164,7 @@
      instead of running under the fade */
   @media (max-width: 760px) and (max-height: 720px) {
     .hero { padding: 40px 0 96px; }
-    .hero .headline { font-size: clamp(38px, 11vw, 52px); }
+    .hero .headline { font-size: clamp(30px, 10.5vw, 52px); }
     .hero-foot { margin-top: 22px; }
     .hero-foot .lede { font-size: 16px; }
     .hero-foot { gap: 26px; }
@@ -629,8 +631,8 @@
   </div>
   <div class="container">
     <h1 class="headline reveal">
-      <span class="line">Where finance</span>
-      <span class="line"><span class="italic">meets</span> code.</span>
+      <span class="line">Accelerating</span>
+      <span class="line"><span class="italic">finance&rsquo;s</span> future.</span>
     </h1>
     <div class="hero-foot">
       <p class="lede reveal">
@@ -757,7 +759,7 @@
       </div>
       <div class="member reveal">
         <div class="member-photo"><img src="team/christian.jpg" alt="Christian Seoane" loading="lazy" /></div>
-        <div class="role">KSG Organizational Delegate</div>
+        <div class="role">KSG Candidate</div>
         <h4>Christian Seoane</h4>
         <div class="member-links">
           <a href="mailto:cdseoane@iu.edu" aria-label="Email Christian Seoane">
@@ -783,6 +785,12 @@
     </div>
 
     <div class="gal">
+      <figure class="gal-item" data-lb="events/fed-rates-workshop.jpg" data-cap="Walking through the federal funds rate on FRED" data-meta="Member workshop">
+        <img src="events/fed-rates-workshop-sm.jpg" alt="A member at the projector pointing to a FRED chart of the federal funds effective rate while members watch from their laptops" loading="lazy" />
+      </figure>
+      <figure class="gal-item" data-lb="events/guest-speakers.jpg" data-cap="With our guest speakers after the session" data-meta="Speaker event">
+        <img src="events/guest-speakers-sm.jpg" alt="A member standing between two guest speakers at the front of a classroom" loading="lazy" />
+      </figure>
       <figure class="gal-item" data-lb="events/mmspc-pitch.jpg" data-cap="Final-round pitch to the judging panel" data-meta="March Madness Stock Pitch">
         <img src="events/mmspc-pitch-sm.jpg" alt="A member presenting a stock pitch at the Kelley podium to a panel of judges" loading="lazy" />
       </figure>
