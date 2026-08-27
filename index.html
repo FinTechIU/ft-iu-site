@@ -595,6 +595,105 @@
   .socials a:hover { color: #fff; background: rgba(255,255,255,0.08); }
   .socials svg { width: 15px; height: 15px; }
 
+  /* ---------- PLACEMENTS MARQUEE ---------- */
+  .placements {
+    /* deliberately lopsided: the label rides above the rail but is too light
+       to read as mass, so the padding is set to centre the LOGOS between the
+       two rules rather than the label-plus-logos stack */
+    padding: 36px 0 75px;
+    border-bottom: 1px solid var(--rule);
+    overflow: hidden;
+  }
+  .placements-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 22px;
+  }
+
+  .marquee {
+    position: relative;
+    /* dissolve the rail into the paper instead of cutting it at the edge */
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 96px, #000 calc(100% - 96px), transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 96px, #000 calc(100% - 96px), transparent);
+  }
+  .marquee-track {
+    display: flex; align-items: center; width: max-content;
+    /* the rail is two identical halves, so travelling exactly -50% lands the
+       second copy where the first started and the seam never shows */
+    animation: marquee-drift 54s linear infinite;
+    /* translate3d keeps the drift on the compositor rather than repainting */
+    will-change: transform;
+  }
+  @keyframes marquee-drift {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track { animation-play-state: paused; }
+
+  .logo {
+    flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center;
+    height: 72px; padding: 0 48px;
+  }
+  .logo img {
+    display: block; width: auto;
+    filter: grayscale(1);
+    opacity: 0.62;
+    transition: opacity .4s ease, filter .4s ease, transform .4s cubic-bezier(.2,.7,.3,1);
+  }
+  /* hovering the rail settles the others back so the held mark carries it.
+     the held rule is written long-hand so it outweighs the dimming one */
+  .marquee:hover .logo img { opacity: 0.3; }
+  .marquee:hover .logo:hover img { opacity: 1; filter: none; transform: scale(1.06); }
+
+  /* sized by eye, not by box: a square monogram needs more height than a
+     wordmark to carry the same weight in the row. --lscale shrinks the whole
+     set on phones without disturbing the ratios between marks */
+  .logo img { height: calc(var(--lh, 30px) * var(--lscale, 1)); }
+  .logo-citadel    { --lh: 26px; }
+  .logo-jump       { --lh: 36px; }
+  .logo-bnp        { --lh: 40px; }
+  .logo-ge         { --lh: 52px; }
+  .logo-deloitte   { --lh: 30px; }
+  .logo-uber       { --lh: 28px; }
+  .logo-ey         { --lh: 52px; }
+  .logo-fifththird { --lh: 30px; }
+  .logo-kpmg       { --lh: 32px; }
+  .logo-amazon     { --lh: 30px; }
+
+  @media (max-width: 760px) {
+    .placements { padding: 28px 0 63px; }
+    .placements-label { margin-bottom: 18px; }
+    .marquee {
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent);
+    }
+    .marquee { --lscale: 0.86; }
+    .logo { height: 58px; padding: 0 30px; }
+    .marquee-track { animation-duration: 40s; }
+  }
+  /* no drift for anyone who asked for less motion: the rail becomes a plain
+     centred wall and the duplicate half comes out */
+  @media (prefers-reduced-motion: reduce) {
+    .marquee {
+      /* nothing runs off the edge any more, so the fade would just look
+         like two half-erased logos */
+      -webkit-mask-image: none; mask-image: none;
+      max-width: 1200px; margin: 0 auto; padding: 0 32px;
+    }
+    .marquee-track {
+      animation: none; width: auto;
+      flex-wrap: wrap; justify-content: center; row-gap: 10px;
+    }
+    .logo-dup { display: none; }
+    /* tighter gutters so the wall breaks into even rows instead of
+       stranding one mark on a line of its own */
+    .logo { padding: 0 26px; }
+    .marquee:hover .logo:hover img { transform: none; }
+  }
+
   /* reveal */
   .reveal { opacity: 0; transform: translateY(12px); transition: opacity .5s ease, transform .5s ease; }
   .reveal.on { opacity: 1; transform: none; }
@@ -643,7 +742,10 @@
           <span>Join<span class="btn-long"> the club</span></span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 5l7 7-7 7"/></svg>
         </a>
-        <a class="btn btn-ghost" href="#podcast">Listen</a>
+        <a class="btn btn-ghost" href="https://groupme.com/join_group/96345040/FTlx9aAB" target="_blank" rel="noopener">
+          GroupMe
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l10-10"/><path d="M7 7h10v10"/></svg>
+        </a>
       </div>
     </div>
   </div>
@@ -655,6 +757,37 @@
   <span>Learn more</span>
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
 </a>
+
+<!-- PLACEMENTS -->
+<section class="placements" aria-label="Where our members and alumni work">
+  <div class="container">
+    <p class="placements-label">Members &amp; alumni at</p>
+  </div>
+  <div class="marquee">
+    <div class="marquee-track">
+        <div class="logo logo-citadel"><img src="logos/citadel.svg" alt="Citadel" decoding="async" /></div>
+        <div class="logo logo-jump"><img src="logos/jump.svg" alt="Jump Trading" decoding="async" /></div>
+        <div class="logo logo-bnp"><img src="logos/bnp.svg" alt="BNP Paribas" decoding="async" /></div>
+        <div class="logo logo-ge"><img src="logos/ge.svg" alt="General Electric" decoding="async" /></div>
+        <div class="logo logo-deloitte"><img src="logos/deloitte.svg" alt="Deloitte" decoding="async" /></div>
+        <div class="logo logo-uber"><img src="logos/uber.svg" alt="Uber" decoding="async" /></div>
+        <div class="logo logo-ey"><img src="logos/ey.svg" alt="EY" decoding="async" /></div>
+        <div class="logo logo-fifththird"><img src="logos/fifththird.svg" alt="Fifth Third Bank" decoding="async" /></div>
+        <div class="logo logo-kpmg"><img src="logos/kpmg.svg" alt="KPMG" decoding="async" /></div>
+        <div class="logo logo-amazon"><img src="logos/amazon.svg" alt="Amazon" decoding="async" /></div>
+        <div aria-hidden="true" class="logo logo-citadel logo-dup"><img src="logos/citadel.svg" alt="" decoding="async" /></div>
+        <div aria-hidden="true" class="logo logo-jump logo-dup"><img src="logos/jump.svg" alt="" decoding="async" /></div>
+        <div aria-hidden="true" class="logo logo-bnp logo-dup"><img src="logos/bnp.svg" alt="" decoding="async" /></div>
+        <div aria-hidden="true" class="logo logo-ge logo-dup"><img src="logos/ge.svg" alt="" decoding="async" /></div>
+        <div aria-hidden="true" class="logo logo-deloitte logo-dup"><img src="logos/deloitte.svg" alt="" decoding="async" /></div>
+        <div aria-hidden="true" class="logo logo-uber logo-dup"><img src="logos/uber.svg" alt="" decoding="async" /></div>
+        <div aria-hidden="true" class="logo logo-ey logo-dup"><img src="logos/ey.svg" alt="" decoding="async" /></div>
+        <div aria-hidden="true" class="logo logo-fifththird logo-dup"><img src="logos/fifththird.svg" alt="" decoding="async" /></div>
+        <div aria-hidden="true" class="logo logo-kpmg logo-dup"><img src="logos/kpmg.svg" alt="" decoding="async" /></div>
+        <div aria-hidden="true" class="logo logo-amazon logo-dup"><img src="logos/amazon.svg" alt="" decoding="async" /></div>
+    </div>
+  </div>
+</section>
 
 <!-- LEADERSHIP -->
 <section id="team">
